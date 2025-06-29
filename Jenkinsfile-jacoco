@@ -13,13 +13,22 @@ pipeline {
         stage('Build'){
             steps{
                 echo 'Building Maven project'
-                bat 'mvn clean compile'
+                if (isUnix()){
+                    sh 'mvn clean compile'
+                }else{
+                    bat 'mvn clean compile'
+                }
             }
         }
         stage('Test'){
             steps{
                 echo 'Building Maven project'
-                bat 'mvn test'
+                if (isUnix()){
+                    sh 'mvn test'
+                }else{
+                    bat 'mvn test'
+                }                
+
                 junit '**/target/surefire-reports/*.xml'
                 jacoco classPattern: '**/target/classes', exclusionPattern: '**/*Test*.class', execPattern: '**/target/jacoco.exec', inclusionPattern: '**/*.class', sourceExclusionPattern: 'generated/**/*.java', sourceInclusionPattern: '**/*.java'
             }
